@@ -1,0 +1,26 @@
+:root {
+    --amarelo-claro: hsl(44, 100%, 58%);
+    --amarelo: hsl(44, 100%, 48%);
+    --amarelo-escuro: hsl(44, 100%, 38%);
+    --azul-claro: hsl(201, 100%, 41%);
+    --azul: hsl(201, 100%, 31%);
+    --azul-escuro: hsl(201, 100%, 21%);
+    --cinza-claro: #F1F1F1;
+    --cinza: #BDBDBD;
+    --cinza-escuro: #525252;
+    --verde-claro: hsl(130, 54%, 50%);
+    --verde: hsl(130, 54%, 40%);
+    --verde-escuro: hsl(130, 54%, 30%);
+    --vermelho-claro: hsl(358, 78%, 55%);
+    --vermelho: hsl(358, 78%, 45%);
+    --vermelho-escuro: hsl(358, 78%, 35%)
+}
+
+.text-verde-escuro {
+    color: var(--verde-escuro);
+}
+
+.bg-verde-escuro {
+    background-color: var(--verde-escuro);
+    color: #ffffff;
+}
