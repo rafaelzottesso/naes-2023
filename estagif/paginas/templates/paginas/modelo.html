@@ -9,7 +9,11 @@
     <meta name="description" content="">
     <meta name="author" content="Rafael Zottesso">
 
-    <title>Sticky Footer Navbar Template · Bootstrap v5.3</title>
+    <title>
+        {% block title %}
+        EstagIF :: Controle de estágios
+        {% endblock %}
+    </title>
 
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/sticky-footer-navbar.css' %}" rel="stylesheet">
@@ -19,6 +23,7 @@
 
 <body class="d-flex flex-column h-100">
 
+    {% block menu %}
     <header>
         <!-- Fixed navbar -->
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-verde-escuro">
@@ -31,7 +36,7 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link" aria-current="page" href="{% url 'pagina-inicial' %}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Link</a>
@@ -50,6 +55,7 @@
                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
                         </li>
+                        
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
@@ -76,10 +82,13 @@
             </div>
         </nav>
     </header>
+    {% endblock %}
 
+    
     <!-- Begin page content -->
     <main class="flex-shrink-0">
         <div class="container">
+            {% block conteudo %}
 
             <h1 class="mt-5">Título da Página</h1>
 
@@ -89,6 +98,7 @@
 
             <p>Back to <a href="/docs/5.3/examples/sticky-footer/">the default sticky footer</a> minus the navbar.</p>
 
+            {% endblock %}
         </div>
     </main>
 
@@ -96,16 +106,23 @@
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container">
             <span class="text-muted">
+                {% block rodape %}
                 EstagIF
                 ~
                 Gerenciamento de Estágios do IFPR
                 ~
                 Desenvolvido por Rafael H. D. Zottesso</span>
+                {% endblock %}
         </div>
     </footer>
 
 
+    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    {% block scripts %}
+
+    {% endblock %}
 
 
 </body>
