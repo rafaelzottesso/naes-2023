@@ -15,6 +15,9 @@ class Campus(models.Model):
 
     def __str__(self):
         return f"{self.nome}"
+    
+    class Meta:
+        verbose_name_plural = "Campi"
 
 
 class Curso(models.Model):
@@ -29,7 +32,7 @@ class Curso(models.Model):
 
 class Estudante(models.Model):
     nome = models.CharField(max_length=50)
-    cpf = models.CharField(max_length=14, verbose_name="CPF")
+    cpf = models.CharField(max_length=14, verbose_name="CPF", unique=True)
     data_nascimento = models.DateField()
     telefone = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
@@ -46,7 +49,7 @@ class Estudante(models.Model):
 
 class Servidor(models.Model):
     nome = models.CharField(max_length=50)
-    cpf = models.CharField(max_length=14)
+    cpf = models.CharField(max_length=14, verbose_name="CPF", unique=True)
     data_nascimento = models.DateField()
     telefone = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
@@ -58,6 +61,9 @@ class Servidor(models.Model):
 
     def __str__(self):
         return f"{self.nome} ({self.siape})"
+    
+    class Meta:
+        verbose_name_plural = "Servidores"
 
 
 class UnidadeConcedente(models.Model):
@@ -72,12 +78,15 @@ class UnidadeConcedente(models.Model):
     def __str__(self):
         return f"{self.nome} ({self.documento})"
     
+    class Meta:
+        verbose_name_plural = "Unidades Concedentes"
+    
 
 class Responsavel(models.Model):
     nome = models.CharField(max_length=50)
     email = models.EmailField(max_length=100)
     telefone = models.CharField(max_length=15)
-    cpf = models.CharField(max_length=14)
+    cpf = models.CharField(max_length=14, verbose_name="CPF", unique=True)
     empresa = models.ForeignKey(UnidadeConcedente, on_delete=models.PROTECT)
 
     atualizado_em = models.DateTimeField(auto_now=True)
@@ -85,6 +94,9 @@ class Responsavel(models.Model):
 
     def __str__(self):
         return f"{self.nome} ({self.telefone})"
+
+    class Meta:
+        verbose_name_plural = "Responsáveis"
 
 
 class Intermediario(models.Model):
@@ -135,6 +147,7 @@ class Estagio(models.Model):
     
     class Meta:
         verbose_name = "Estágio"
+        ordering = ['-data_inicio']
 
 
 class Historico(models.Model):
