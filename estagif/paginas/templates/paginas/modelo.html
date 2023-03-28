@@ -57,10 +57,19 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{% url 'cadastrar-campus' %}">Campus</a></li>
                                 <li><a class="dropdown-item" href="{% url 'cadastrar-curso' %}">Curso</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a class="dropdown-item" href="{% url 'cadastrar-unidade-concedente' %}">Unidade Concedente</a></li>
+                                <li><a class="dropdown-item" href="{% url 'cadastrar-responsavel' %}">Responsável</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                
+                                <li><a class="dropdown-item" href="{% url 'cadastrar-intermediario' %}">Intermediário</a></li>
+                                <li><a class="dropdown-item" href="{% url 'cadastrar-situacao' %}">Situação</a></li>
+                                <li><a class="dropdown-item" href="{% url 'cadastrar-estagio' %}">Estágio</a></li>
+                                <li><a class="dropdown-item" href="{% url 'cadastrar-relatorio' %}">Relatório</a></li>
+                                <li><hr class="dropdown-divider"></li>
+
+                                <li><a class="dropdown-item" href="{% url 'cadastrar-estudante' %}">Estudante</a></li>
+                                <li><a class="dropdown-item" href="{% url 'cadastrar-servidor' %}">Servidor</a></li>
+                                
                             </ul>
                         </li>
                         

@@ -1,0 +1,78 @@
+{% extends 'paginas/modelo.html' %}
+
+{% load static %}
+
+{% block conteudo %}
+
+<div class="row justify-content-center align-items-center mt-3">
+    <div class="col-md-8">
+        <h3 class="">Lista de Estágios</h3>
+    </div>
+    <div class="col-md">
+        <a href="{% url 'cadastrar-estagio' %}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg"></i>
+            Novo Estágio
+        </a>
+    </div>
+</div>
+
+<hr>
+
+<div class="table-responsive-lg">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Estudante</th>
+                <th>Intermediário</th>
+                <th>Unidade Concedente</th>
+                <th>Responsável Empresa</th>
+                <th>Orientador</th>
+                <th>Data de Início</th>
+                <th>Data de Término</th>
+                <th>Carga Horária Semanal</th>
+                <th>Situação</th>
+                <th>Observações</th>
+                <th>Data de Protocolo</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in object_list %}
+            <tr class="">
+                <td>{{ obj.estudante }}</td>
+                <td>{{ obj.intermediario }}</td>
+                <td>{{ obj.unidade_concedente }}</td>
+                <td>{{ obj.responsavel_empresa }}</td>
+                <td>{{ obj.orientador }}</td>
+                <td>{{ obj.data_inicio }}</td>
+                <td>{{ obj.data_termino }}</td>
+                <td>{{ obj.ch_semanal }}</td>
+                <td>{{ obj.situacao }}</td>
+                <td>{{ obj.observacoes }}</td>
+                <td>{{ obj.data_protocolo }}</td>
+                <td>
+                    <div class="dropdown">
+                        <a class="btn btn-sm btn-outline-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-gear"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item text-primary" href="{% url 'editar-estagio' obj.pk %}">
+                                <i class="bi bi-pencil-square"></i> Editar</a></li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'excluir-estagio' obj.pk %}">
+                                <i class="bi bi-trash"></i> Excluir</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <th colspan="100%">Nenhum registro encontrado.</th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+Certifique-se de que os nomes dos atributos estão corretos e correspondem aos nomes definidos no modelo "Estagio". Além disso, certifique-se de que as URLs para as páginas de cadastro, edição e exclusão estejam corretas.
