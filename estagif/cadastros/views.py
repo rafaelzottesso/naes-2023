@@ -15,6 +15,12 @@ class CampusCreate(CreateView):
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-campus")
 
+    def get_context_data(self, *args, **kwargs):
+
+        dados = super().get_context_data(*args, **kwargs)
+        dados["titulo"] = "Cadastro de Campus"
+        return dados
+
 
 class CursoCreate(CreateView):
     model = Curso
