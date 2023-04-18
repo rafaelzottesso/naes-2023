@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path 
 from .views import CampusCreate, CampusUpdate, CampusList, CampusDetail, CampusDelete
 from .views import CursoCreate, CursoUpdate, CursoList, CursoDetail, CursoDelete
 from .views import EstudanteCreate, EstudanteUpdate, EstudanteList, EstudanteDetail, EstudanteDelete

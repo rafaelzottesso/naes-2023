@@ -6,10 +6,12 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
 
 
-class CampusCreate(CreateView):
+class CampusCreate(LoginRequiredMixin, CreateView):
     model = Campus
     fields = ["nome"]
     template_name = "cadastros/form.html"
@@ -27,6 +29,7 @@ class CursoCreate(CreateView):
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-curso")
+    extra_context = {"titulo": "Cadastro de Curso"}
 
 
 class EstudanteCreate(CreateView):
@@ -37,6 +40,7 @@ class EstudanteCreate(CreateView):
     ]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-estudante")
+    extra_context = {"titulo": "Cadastro de Estudante"}
 
 
 class ServidorCreate(CreateView):

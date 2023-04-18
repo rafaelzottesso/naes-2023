@@ -5,7 +5,10 @@
 {% load crispy_forms_tags %}
 
 {% block conteudo %}
-<h3 class="mt-3 border-bottom mb-4 pb-2">{{ titulo|default:"Formulário de cadastro e edição" }}</h3>
+
+<h3 class="mt-3 border-bottom mb-4 pb-2">
+    {{ titulo|default:"Formulário de cadastro e edição" }}
+</h3>
 
 <form action="" method="post">
     {% csrf_token %}
