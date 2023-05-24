@@ -1,5 +1,9 @@
 from django.db import models
 
+# Importar a classe User do Django para fazer os relacionamentos
+from django.contrib.auth.models import User
+
+
 # Create your models here.
 TIPOS_RELATORIO = [
     ('Parcial', 'Parcial'),
@@ -40,6 +44,9 @@ class Estudante(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.PROTECT)
     campus = models.ForeignKey(Campus, on_delete=models.PROTECT)
     
+    # A relação com o usuário é um para um, ou seja, um usuário só pode ter um estudante e vice versa
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    
     atualizado_em = models.DateTimeField(auto_now=True)
     cadastrado_em = models.DateTimeField(auto_now_add=True)
 
@@ -55,6 +62,9 @@ class Servidor(models.Model):
     email = models.EmailField(max_length=100)
     siape = models.CharField(max_length=15, verbose_name="SIAPE")
     campus = models.ForeignKey(Campus, on_delete=models.PROTECT)
+
+    # A relação com o usuário é um para um, ou seja, um usuário só pode ter um servidor e vice versa
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
 
     atualizado_em = models.DateTimeField(auto_now=True)
     cadastrado_em = models.DateTimeField(auto_now_add=True)
@@ -142,6 +152,9 @@ class Estagio(models.Model):
     atualizado_em = models.DateTimeField(auto_now=True)
     cadastrado_em = models.DateTimeField(auto_now_add=True)
 
+    # A relação ForeignKey é um pra muitos, ou seja, o usuário pode cadastrar vários estágios
+    cadastrado_por = models.ForeignKey(User, on_delete=models.PROTECT)
+
     def __str__(self):
         return f"[#{self.id}] {self.estudante.nome} ({self.data_inicio} - {self.unidade_concedente.nome})"
     
@@ -155,6 +168,7 @@ class Historico(models.Model):
     situacao = models.ForeignKey(Situacao, on_delete=models.PROTECT, verbose_name="situação")
 
     atualizado_em = models.DateTimeField(auto_now=True)
+    atualizado_por = models.ForeignKey(User, on_delete=models.PROTECT)
     cadastrado_em = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -174,6 +188,9 @@ class Relatorio(models.Model):
 
     atualizado_em = models.DateTimeField(auto_now=True)
     cadastrado_em = models.DateTimeField(auto_now_add=True)
+    
+    # A relação ForeignKey é um pra muitos, ou seja, o usuário pode cadastrar vários relatórios
+    cadastrado_por = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.nome}"

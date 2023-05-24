@@ -91,6 +91,37 @@ class EstagioCreate(CreateView):
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-estagio")
 
+    # Método padrão chamado quando um formulário é submetido
+    def form_valid(self, form):
+        # Neste ponto, ainda não temos um objeto, apenas os dados do formulário por meio do "form.instance.atributo"
+        form.instance.usuario = self.request.user
+        
+        # Aqui é póssivel fazer qualquer coisa com os dados do formulário, antes de fazer o INSERT no banco ou aquelas
+        # validações que não são possíveis fazer no models.py
+
+        # No exemplo a seguir, estamos verificando se a data de início é igual ou posterior a data de término
+        if(form.instance.data_inicio >= form.instance.data_termino):
+            # Se isso for verdade, temos que adicionar um erro no formulário
+            # O erro é adicionado no campo data_inicio com a mensagem abaixo
+            form.add_error("data_inicio", "A data de início deve ser menor que a data de término")
+            # Também podemos adicionar um erro no data_termino, porém sem mensagem pra não ficar repetitivo
+            form.add_error("data_termino", "")
+            # Por fim, retornamos o usuário de volta para o formulário com os erros
+            return super().form_invalid(form)
+
+        # Aqui cria-se o objeto e salva o registro no banco de dados.
+        # O super() faz todas as validações que encontrar no models.py
+        # O comportamento padrão é redirecionar para a URL de sucesso caso todas as validações sejam atendidas
+        url = super().form_valid(form)
+
+        # Podemos acessar o objeto criado e modificar alguma coisa
+        # self.object.atributo = "valor"
+        # porém, precisamos salvar esse objeto para que o Django faça o UPDATE no banco de dados
+        # self.object.save()
+
+        # Por fim, retornamos a URL de sucesso do success_url
+        return url
+
 
 class RelatorioCreate(CreateView):
     model = Relatorio
@@ -100,6 +131,10 @@ class RelatorioCreate(CreateView):
     ]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-relatorio")
+
+    def form_valid(self, form):
+        form.instance.cadastrado_por = self.request.user
+        return super().form_valid(form)
 
 
 ##################################################
