@@ -1,3 +1,6 @@
+from typing import Any, Optional
+from django.db import models
+from django.db.models.query import QuerySet
 from .models import Campus, Curso, UnidadeConcedente, Responsavel
 from .models import Estudante, Servidor, Intermediario, Situacao, Estagio, Relatorio
 from django.urls import reverse_lazy
@@ -7,6 +10,8 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -24,7 +29,7 @@ class CampusCreate(LoginRequiredMixin, CreateView):
         return dados
 
 
-class CursoCreate(CreateView):
+class CursoCreate(LoginRequiredMixin, CreateView):
     model = Curso
     fields = ["nome"]
     template_name = "cadastros/form.html"
@@ -32,7 +37,7 @@ class CursoCreate(CreateView):
     extra_context = {"titulo": "Cadastro de Curso"}
 
 
-class EstudanteCreate(CreateView):
+class EstudanteCreate(LoginRequiredMixin, CreateView):
     model = Estudante
     fields = [
         "nome", "cpf", "data_nascimento", "telefone", "email",
@@ -43,7 +48,7 @@ class EstudanteCreate(CreateView):
     extra_context = {"titulo": "Cadastro de Estudante"}
 
 
-class ServidorCreate(CreateView):
+class ServidorCreate(LoginRequiredMixin, CreateView):
     model = Servidor
     fields = [
         "nome","cpf","data_nascimento","telefone",
@@ -53,35 +58,35 @@ class ServidorCreate(CreateView):
     success_url = reverse_lazy("listar-servidor")
 
 
-class UnidadeConcedenteCreate(CreateView):
+class UnidadeConcedenteCreate(LoginRequiredMixin, CreateView):
     model = UnidadeConcedente
     fields = ["nome", "documento", "telefone", "email",]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-unidade-concedente")
 
 
-class ResponsavelCreate(CreateView):
+class ResponsavelCreate(LoginRequiredMixin, CreateView):
     model = Responsavel
     fields = ["nome", "email", "telefone", "cpf", "empresa",]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-responsavel")
 
 
-class IntermediarioCreate(CreateView):
+class IntermediarioCreate(LoginRequiredMixin, CreateView):
     model = Intermediario
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-intermediario")
 
 
-class SituacaoCreate(CreateView):
+class SituacaoCreate(LoginRequiredMixin, CreateView):
     model = Situacao
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-situacao")
 
 
-class EstagioCreate(CreateView):
+class EstagioCreate(LoginRequiredMixin, CreateView):
     model = Estagio
     fields = [
         "estudante", "intermediario", "unidade_concedente", "responssvel_empresa",
@@ -92,9 +97,9 @@ class EstagioCreate(CreateView):
     success_url = reverse_lazy("listar-estagio")
 
     # Método padrão chamado quando um formulário é submetido
-    def form_valid(self, form):
+    def form_valid(self, form): 
         # Neste ponto, ainda não temos um objeto, apenas os dados do formulário por meio do "form.instance.atributo"
-        form.instance.usuario = self.request.user
+        form.instance.cadastrado_por = self.request.user
         
         # Aqui é póssivel fazer qualquer coisa com os dados do formulário, antes de fazer o INSERT no banco ou aquelas
         # validações que não são possíveis fazer no models.py
@@ -123,7 +128,7 @@ class EstagioCreate(CreateView):
         return url
 
 
-class RelatorioCreate(CreateView):
+class RelatorioCreate(LoginRequiredMixin, CreateView):
     model = Relatorio
     fields = [
         "estagio", "data_inicio", "data_termino",
@@ -140,21 +145,21 @@ class RelatorioCreate(CreateView):
 ##################################################
 
 
-class CampusUpdate(UpdateView):
+class CampusUpdate(LoginRequiredMixin, UpdateView):
     model = Campus
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-campus")
 
 
-class CursoUpdate(UpdateView):
+class CursoUpdate(LoginRequiredMixin, UpdateView):
     model = Curso
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-curso")
 
 
-class EstudanteUpdate(UpdateView):
+class EstudanteUpdate(LoginRequiredMixin, UpdateView):
     model = Estudante
     fields = [
         "nome", "cpf", "data_nascimento", "telefone", "email",
@@ -164,7 +169,7 @@ class EstudanteUpdate(UpdateView):
     success_url = reverse_lazy("listar-estudante")
 
 
-class ServidorUpdate(UpdateView):
+class ServidorUpdate(LoginRequiredMixin, UpdateView):
     model = Servidor
     fields = [
         "nome","cpf","data_nascimento","telefone",
@@ -174,35 +179,35 @@ class ServidorUpdate(UpdateView):
     success_url = reverse_lazy("listar-servidor")
 
 
-class UnidadeConcedenteUpdate(UpdateView):
+class UnidadeConcedenteUpdate(LoginRequiredMixin, UpdateView):
     model = UnidadeConcedente
     fields = ["nome", "documento", "telefone", "email",]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-unidade-concedente")
 
 
-class ResponsavelUpdate(UpdateView):
+class ResponsavelUpdate(LoginRequiredMixin, UpdateView):
     model = Responsavel
     fields = ["nome", "email", "telefone", "cpf", "empresa",]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-responsavel")
 
 
-class IntermediarioUpdate(UpdateView):
+class IntermediarioUpdate(LoginRequiredMixin, UpdateView):
     model = Intermediario
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-intermediario")
 
 
-class SituacaoUpdate(UpdateView):
+class SituacaoUpdate(LoginRequiredMixin, UpdateView):
     model = Situacao
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-situacao")
 
 
-class EstagioUpdate(UpdateView):
+class EstagioUpdate(LoginRequiredMixin, UpdateView):
     model = Estagio
     fields = [
         "estudante", "intermediario", "unidade_concedente", "responssvel_empresa",
@@ -212,8 +217,22 @@ class EstagioUpdate(UpdateView):
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-estagio")
 
+    # def get_object(self):
+    #     self.object = get_object_or_404(
+    #             Estagio, 
+    #             pk=self.kwargs["pk"],
+    #             cadastrado_por=self.request.user
+    #         )
 
-class RelatorioUpdate(UpdateView):
+    #     # o get traz um objeto e o filter um array de objetos
+    #     # self.object = Estagio.objects.get(
+    #     #         pk=self.kwargs["pk"],
+    #     #         cadastrado_por=self.request.user
+    #     #     )
+    #     return self.object
+
+
+class RelatorioUpdate(LoginRequiredMixin, UpdateView):
     model = Relatorio
     fields = [
         "estagio", "data_inicio", "data_termino",
@@ -222,64 +241,73 @@ class RelatorioUpdate(UpdateView):
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-relatorio")
 
-
 ##################################################
 
-class CampusDelete(DeleteView):
+
+class CampusDelete(LoginRequiredMixin, DeleteView):
     model = Campus
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-campus")
 
 
-class CursoDelete(DeleteView):  
+class CursoDelete(LoginRequiredMixin, DeleteView):  
     model = Curso
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-curso")
 
 
-class EstudanteDelete(DeleteView):
+class EstudanteDelete(LoginRequiredMixin, DeleteView):
     model = Estudante
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-estudante")
 
 
-class ServidorDelete(DeleteView):
+class ServidorDelete(LoginRequiredMixin, DeleteView):
     model = Servidor
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-servidor")
 
 
-class UnidadeConcedenteDelete(DeleteView):
+class UnidadeConcedenteDelete(LoginRequiredMixin, DeleteView):
     model = UnidadeConcedente
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-unidade-concedente")
 
 
-class ResponsavelDelete(DeleteView):
+class ResponsavelDelete(LoginRequiredMixin, DeleteView):
     model = Responsavel
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-responsavel")
 
 
-class IntermediarioDelete(DeleteView):
+class IntermediarioDelete(LoginRequiredMixin, DeleteView):
     model = Intermediario
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-intermediario")
 
 
-class SituacaoDelete(DeleteView):
+class SituacaoDelete(LoginRequiredMixin, DeleteView):
     model = Situacao
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-situacao")
 
 
-class EstagioDelete(DeleteView):
+class EstagioDelete(LoginRequiredMixin, DeleteView):
     model = Estagio
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-estagio")
 
+    # def get_object(self):
+    #     self.object = get_object_or_404(
+    #             Estagio, 
+    #             pk=self.kwargs["pk"],
+    #             cadastrado_por=self.request.user
+    #         )
 
-class RelatorioDelete(DeleteView):
+    #     return self.object
+
+
+class RelatorioDelete(LoginRequiredMixin, DeleteView):
     model = Relatorio
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-relatorio")
@@ -288,52 +316,58 @@ class RelatorioDelete(DeleteView):
 ##################################################
 
 
-class CampusList(ListView):
+class CampusList(LoginRequiredMixin, ListView):
     model = Campus
     template_name = "cadastros/list/campus.html"
 
 
-class CursoList(ListView):
+class CursoList(LoginRequiredMixin, ListView):
     model = Curso
     template_name = "cadastros/list/curso.html"
 
 
-class EstudanteList(ListView):  
+class EstudanteList(LoginRequiredMixin, ListView):  
     model = Estudante
     template_name = "cadastros/list/estudante.html"
 
 
-class ServidorList(ListView):
+class ServidorList(LoginRequiredMixin, ListView):
     model = Servidor
     template_name = "cadastros/list/servidor.html"
 
 
-class UnidadeConcedenteList(ListView):
+class UnidadeConcedenteList(LoginRequiredMixin, ListView):
     model = UnidadeConcedente
     template_name = "cadastros/list/unidade-concedente.html"
 
 
-class ResponsavelList(ListView):
+class ResponsavelList(LoginRequiredMixin, ListView):
     model = Responsavel
     template_name = "cadastros/list/responsavel.html"
 
 
-class IntermediarioList(ListView):
+class IntermediarioList(LoginRequiredMixin, ListView):
     model = Intermediario
     template_name = "cadastros/list/intermediario.html"
 
 
-class SituacaoList(ListView):
+class SituacaoList(LoginRequiredMixin, ListView):
     model = Situacao
     template_name = "cadastros/list/situacao.html"
 
 
-class EstagioList(ListView):
+class EstagioList(LoginRequiredMixin, ListView):
     model = Estagio
     template_name = "cadastros/list/estagio.html"
 
+    # # Altera a consulta padrão de um ListView que é listar todos os registros
+    # def get_queryset(self):
+    #     # o object_list é utilizado lá no for do HTML para armazenar uma lista de objetos
+    #     # Precisamos retornar essa lista
+    #     return Estagio.objects.filter(cadastrado_por=self.request.user)
 
-class RelatorioList(ListView):
+
+class RelatorioList(LoginRequiredMixin, ListView):
     model = Relatorio
     template_name = "cadastros/list/relatorio.html"
 
@@ -341,52 +375,52 @@ class RelatorioList(ListView):
 ##################################################
 
 
-class CampusDetail(DetailView):
+class CampusDetail(LoginRequiredMixin, DetailView):
     model = Campus
     template_name = "cadastros/detail/campus.html"
 
 
-class CursoDetail(DetailView):
+class CursoDetail(LoginRequiredMixin, DetailView):
     model = Curso
     template_name = "cadastros/detail/curso.html"
 
 
-class EstudanteDetail(DetailView):
+class EstudanteDetail(LoginRequiredMixin, DetailView):
     model = Estudante
     template_name = "cadastros/detail/estudante.html"
 
 
-class ServidorDetail(DetailView):
+class ServidorDetail(LoginRequiredMixin, DetailView):
     model = Servidor
     template_name = "cadastros/detail/servidor.html"
 
 
-class UnidadeConcedenteDetail(DetailView):
+class UnidadeConcedenteDetail(LoginRequiredMixin, DetailView):
     model = UnidadeConcedente
     template_name = "cadastros/detail/unidade-concedente.html"
 
 
-class ResponsavelDetail(DetailView):
+class ResponsavelDetail(LoginRequiredMixin, DetailView):
     model = Responsavel
     template_name = "cadastros/detail/responsavel.html"
 
 
-class IntermediarioDetail(DetailView):
+class IntermediarioDetail(LoginRequiredMixin, DetailView):
     model = Intermediario
     template_name = "cadastros/detail/intermediario.html"
 
 
-class SituacaoDetail(DetailView):
+class SituacaoDetail(LoginRequiredMixin, DetailView):
     model = Situacao
     template_name = "cadastros/detail/situacao.html"
 
 
-class EstagioDetail(DetailView):
+class EstagioDetail(LoginRequiredMixin, DetailView):
     model = Estagio
     template_name = "cadastros/detail/estagio.html"
 
 
-class RelatorioDetail(DetailView):
+class RelatorioDetail(LoginRequiredMixin, DetailView):
     model = Relatorio
     template_name = "cadastros/detail/relatorio.html"
 

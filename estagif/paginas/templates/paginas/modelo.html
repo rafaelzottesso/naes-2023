@@ -76,15 +76,28 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                Dropdown
+                                Listar
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar-campus' %}">Campus</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar-curso' %}">Curso</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar-unidade-concedente' %}">Unidade Concedente</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar-responsavel' %}">Responsável</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            
+                                <li><a class="dropdown-item" href="{% url 'listar-intermediario' %}">Intermediário</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar-situacao' %}">Situação</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar-estagio' %}">Estágio</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar-relatorio' %}">Relatório</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            
+                                <li><a class="dropdown-item" href="{% url 'listar-estudante' %}">Estudante</a></li>
+                                <li><a class="dropdown-item" href="{% url 'listar-servidor' %}">Servidor</a></li>
+                            
                             </ul>
                         </li>
 
