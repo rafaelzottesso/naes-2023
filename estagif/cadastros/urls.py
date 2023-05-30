@@ -10,6 +10,9 @@ from .views import SituacaoCreate, SituacaoUpdate, SituacaoList, SituacaoDetail,
 from .views import EstagioCreate, EstagioUpdate, EstagioList, EstagioDetail, EstagioDelete
 from .views import RelatorioCreate, RelatorioUpdate, RelatorioList, RelatorioDetail, RelatorioDelete
 
+
+from .views import VendaCreate, CarrinhoCreate
+
 urlpatterns = [
     
     path("cadastrar/campus/", CampusCreate.as_view(), name="cadastrar-campus"),
@@ -67,11 +70,11 @@ urlpatterns = [
     path("detalhar/estagio/<int:pk>/", EstagioDetail.as_view(), name="detalhar-estagio"),
     path("detalhar/relatorio-estagio/<int:pk>/", RelatorioDetail.as_view(), name="detalhar-relatorio"),
 
-
-
-
     # path("editar/campus/<int:pk>/", CampusUpdate.as_view(), name="editar-campus"),
     # path("editar/curso/<int:pk>/", CursoUpdate.as_view(), name="editar-curso"),
 
+
+    path("vender/", VendaCreate.as_view(), name="vender"),
+    path("adicionar/", CarrinhoCreate.as_view(), name="adicionar"),
 
 ]

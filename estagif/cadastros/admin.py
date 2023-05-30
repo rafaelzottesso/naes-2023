@@ -15,3 +15,10 @@ admin.site.register(Estagio)
 admin.site.register(Historico)
 admin.site.register(Relatorio)
 
+
+from .models import Produto, Venda, ProdutoVenda, Carinho
+admin.site.register(Produto)
+admin.site.register(Venda)
+admin.site.register(ProdutoVenda)
+admin.site.register(Carinho)
+

@@ -1,6 +1,8 @@
 from typing import Any, Optional
 from django.db import models
 from django.db.models.query import QuerySet
+from django.forms.models import BaseModelForm
+from django.http import HttpResponse
 from .models import Campus, Curso, UnidadeConcedente, Responsavel
 from .models import Estudante, Servidor, Intermediario, Situacao, Estagio, Relatorio
 from django.urls import reverse_lazy
@@ -427,3 +429,54 @@ class RelatorioDetail(LoginRequiredMixin, DetailView):
 
 ##################################################
 
+
+# Exemplo da venda
+from .models import Produto, Venda, ProdutoVenda, Carinho
+
+class CarrinhoCreate(CreateView):
+    model = Carinho
+    template_name = "cadastros/form.html"
+    fields = ["produto", "quantidade"]
+    success_url = reverse_lazy("pagina-inicial")
+
+class VendaCreate(CreateView):
+    model = Venda
+    template_name = "cadastros/form.html"
+    fields = ["cliente", "forma_pagamento"]
+    success_url = reverse_lazy("pagina-inicial")
+
+    # Na hora que for salvar a venda...
+    def form_valid(self, form):
+        # Define um valor porque é obrigatório
+        form.instance.valor_total = 0.0
+        
+        # Cria a venda no banco e o object
+        url = super().form_valid(form)
+
+        # Busca todos os produtos que estão no carrinho
+        prod_carrinho = Carinho.objects.all()
+
+        valor_total = 0.0
+
+        # Para cada produto registrado no carrinho...
+        for c in prod_carrinho:
+
+            valor_total += (float(c.produto.valor) * c.quantidade)
+
+            ProdutoVenda.objects.create(
+                venda = self.object,
+                produto = c.produto,
+                quantidade = c.quantidade,
+                valor=c.produto.valor * c.quantidade
+            )
+
+            c.delete()
+
+        # Atualiza o objedo da venda com o valor total novo
+        self.object.valor_total = valor_total
+        # Faz o UPDATE no banco de dados
+        self.object.save()
+
+
+        return url
+        

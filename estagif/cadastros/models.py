@@ -198,3 +198,40 @@ class Relatorio(models.Model):
     class Meta:
         verbose_name = "Relatório"
 
+
+
+
+class Produto(models.Model):
+    nome = models.CharField(max_length=50)
+    valor = models.DecimalField(decimal_places=2, max_digits=10)
+
+    def __str__(self):
+        return f"{self.nome} - R${self.valor}"
+    
+
+class Venda(models.Model):
+    cliente = models.CharField(max_length=50)
+    valor_total = models.DecimalField(decimal_places=2, max_digits=10)
+    forma_pagamento = models.CharField(max_length=50)
+    data = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.cliente} - R${self.valor_total}"
+
+
+class ProdutoVenda(models.Model):
+    venda = models.ForeignKey(Venda, on_delete=models.PROTECT)
+    produto = models.ForeignKey(Produto, on_delete=models.PROTECT)
+    quantidade = models.IntegerField(default=1)
+    valor = models.DecimalField(decimal_places=2, max_digits=10)
+
+    def __str__(self):
+        return f"#{self.venda.pk} ~ {self.quantidade} x {self.produto}"
+
+
+class Carinho(models.Model):
+    produto = models.ForeignKey(Produto, on_delete=models.PROTECT)
+    quantidade = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantidade} x {self.produto}"
