@@ -7,6 +7,73 @@
 
 <h3 class="mt-3">Exemplo de página</h3>
 
+<hr>
+
+{% if request.user.is_authenticated %}
+
+<h5>Meus estágios ~ Orientador</h5>
+
+<table class="table table-striped">
+    <tr>
+        <th>Estudante</th>
+        <th>Empresa</th>
+        <th>Período</th>
+    </tr>
+
+    <!-- listar os objetos do tipo estágio -->
+    {% for estagio in estagios_orientador %}
+    <tr>
+        <td>{{ estagio.estudante }}</td>
+        <td>{{ estagio.unidade_concedente }}</td>
+        <td>
+            {{ estagio.data_inicio|date:"d/m/Y" }} 
+            - 
+            {{ estagio.data_termino|date:"d/m/Y" }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <th colspan="100%">Nenhum estágio encontrado.</th>
+    </tr>
+    {% endfor %}
+
+</table>
+
+<hr>
+
+<h5>Meus estágios ~ Estudante</h5>
+<table class="table table-striped">
+    <tr>
+        <th>Orientador</th>
+        <th>Empresa</th>
+        <th>Período</th>
+    </tr>
+    
+    <!-- listar os objetos do tipo estágio -->
+    {% for estagio in estagios_orientador %}
+    <tr>
+        <td>{{ estagio.orientador }}</td>
+        <td>{{ estagio.unidade_concedente }}</td>
+        <td>
+            {{ estagio.data_inicio|date:"d/m/Y" }}
+             - 
+            {{ estagio.data_termino|date:"d/m/Y" }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <th colspan="100%">Nenhum estágio encontrado.</th>
+    </tr>
+    {% endfor %}
+
+</table>
+
+<!-- Fim do usuário autenticado -->
+{% else %}
+<p>
+    Faça o login ou se registre no sistema.
+</p>
+{% endif %}
+
+
 {% endblock %}
 
 
