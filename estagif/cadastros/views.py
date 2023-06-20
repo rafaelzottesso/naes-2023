@@ -12,17 +12,19 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from braces.views import GroupRequiredMixin
 
 from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
 
-class CampusCreate(LoginRequiredMixin, CreateView):
+class CampusCreate(GroupRequiredMixin, CreateView):
     model = Campus
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-campus")
+    group_required = ["Administrador"]
 
     def get_context_data(self, *args, **kwargs):
 
@@ -31,15 +33,16 @@ class CampusCreate(LoginRequiredMixin, CreateView):
         return dados
 
 
-class CursoCreate(LoginRequiredMixin, CreateView):
+class CursoCreate(GroupRequiredMixin, CreateView):
     model = Curso
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-curso")
     extra_context = {"titulo": "Cadastro de Curso"}
+    group_required = ["Administrador"]
 
 
-class EstudanteCreate(LoginRequiredMixin, CreateView):
+class EstudanteCreate(GroupRequiredMixin, CreateView):
     model = Estudante
     fields = [
         "nome", "cpf", "data_nascimento", "telefone", "email",
@@ -48,9 +51,10 @@ class EstudanteCreate(LoginRequiredMixin, CreateView):
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-estudante")
     extra_context = {"titulo": "Cadastro de Estudante"}
+    group_required = ["Administrador"]
 
 
-class ServidorCreate(LoginRequiredMixin, CreateView):
+class ServidorCreate(GroupRequiredMixin, CreateView):
     model = Servidor
     fields = [
         "nome","cpf","data_nascimento","telefone",
@@ -58,37 +62,42 @@ class ServidorCreate(LoginRequiredMixin, CreateView):
     ]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-servidor")
+    group_required = ["Administrador"]
 
 
-class UnidadeConcedenteCreate(LoginRequiredMixin, CreateView):
+class UnidadeConcedenteCreate(GroupRequiredMixin, CreateView):
     model = UnidadeConcedente
     fields = ["nome", "documento", "telefone", "email",]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-unidade-concedente")
+    group_required = ["Administrador"]
 
 
-class ResponsavelCreate(LoginRequiredMixin, CreateView):
+class ResponsavelCreate(GroupRequiredMixin, CreateView):
     model = Responsavel
     fields = ["nome", "email", "telefone", "cpf", "empresa",]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-responsavel")
+    group_required = ["Administrador"]
 
 
-class IntermediarioCreate(LoginRequiredMixin, CreateView):
+class IntermediarioCreate(GroupRequiredMixin, CreateView):
     model = Intermediario
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-intermediario")
+    group_required = ["Administrador"]
 
 
-class SituacaoCreate(LoginRequiredMixin, CreateView):
+class SituacaoCreate(GroupRequiredMixin, CreateView):
     model = Situacao
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-situacao")
+    group_required = ["Administrador"]
 
 
-class EstagioCreate(LoginRequiredMixin, CreateView):
+class EstagioCreate(GroupRequiredMixin, CreateView):
     model = Estagio
     fields = [
         "estudante", "intermediario", "unidade_concedente", "responssvel_empresa",
@@ -97,6 +106,7 @@ class EstagioCreate(LoginRequiredMixin, CreateView):
     ]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-estagio")
+    group_required = ["Administrador"]
 
     # Método padrão chamado quando um formulário é submetido
     def form_valid(self, form): 
@@ -115,6 +125,10 @@ class EstagioCreate(LoginRequiredMixin, CreateView):
             form.add_error("data_termino", "")
             # Por fim, retornamos o usuário de volta para o formulário com os erros
             return super().form_invalid(form)
+        
+        if(form.instance.estudante == form.instance.orientador):
+            form.add_error("estudante", "Você não pode ser seu próprio orientador!")
+            return super().form_invalid(form)
 
         # Aqui cria-se o objeto e salva o registro no banco de dados.
         # O super() faz todas as validações que encontrar no models.py
@@ -130,7 +144,7 @@ class EstagioCreate(LoginRequiredMixin, CreateView):
         return url
 
 
-class RelatorioCreate(LoginRequiredMixin, CreateView):
+class RelatorioCreate(GroupRequiredMixin, CreateView):
     model = Relatorio
     fields = [
         "estagio", "data_inicio", "data_termino",
@@ -138,6 +152,7 @@ class RelatorioCreate(LoginRequiredMixin, CreateView):
     ]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-relatorio")
+    group_required = ["Administrador"]
 
     def form_valid(self, form):
         form.instance.cadastrado_por = self.request.user
@@ -147,18 +162,20 @@ class RelatorioCreate(LoginRequiredMixin, CreateView):
 ##################################################
 
 
-class CampusUpdate(LoginRequiredMixin, UpdateView):
+class CampusUpdate(GroupRequiredMixin, UpdateView):
     model = Campus
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-campus")
+    group_required = ["Administrador"]
 
 
-class CursoUpdate(LoginRequiredMixin, UpdateView):
+class CursoUpdate(GroupRequiredMixin, UpdateView):
     model = Curso
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-curso")
+    group_required = ["Administrador"]
 
 
 class EstudanteUpdate(LoginRequiredMixin, UpdateView):
@@ -181,35 +198,39 @@ class ServidorUpdate(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("listar-servidor")
 
 
-class UnidadeConcedenteUpdate(LoginRequiredMixin, UpdateView):
+class UnidadeConcedenteUpdate(GroupRequiredMixin, UpdateView):
     model = UnidadeConcedente
     fields = ["nome", "documento", "telefone", "email",]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-unidade-concedente")
+    group_required = ["Administrador"]
 
 
-class ResponsavelUpdate(LoginRequiredMixin, UpdateView):
+class ResponsavelUpdate(GroupRequiredMixin, UpdateView):
     model = Responsavel
     fields = ["nome", "email", "telefone", "cpf", "empresa",]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-responsavel")
+    group_required = ["Administrador"]
 
 
-class IntermediarioUpdate(LoginRequiredMixin, UpdateView):
+class IntermediarioUpdate(GroupRequiredMixin, UpdateView):
     model = Intermediario
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-intermediario")
+    group_required = ["Administrador"]
 
 
-class SituacaoUpdate(LoginRequiredMixin, UpdateView):
+class SituacaoUpdate(GroupRequiredMixin, UpdateView):
     model = Situacao
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-situacao")
+    group_required = ["Administrador"]
 
 
-class EstagioUpdate(LoginRequiredMixin, UpdateView):
+class EstagioUpdate(GroupRequiredMixin, UpdateView):
     model = Estagio
     fields = [
         "estudante", "intermediario", "unidade_concedente", "responssvel_empresa",
@@ -218,6 +239,7 @@ class EstagioUpdate(LoginRequiredMixin, UpdateView):
     ]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-estagio")
+    group_required = ["Administrador"]
 
     # def get_object(self):
     #     self.object = get_object_or_404(
@@ -234,7 +256,7 @@ class EstagioUpdate(LoginRequiredMixin, UpdateView):
     #     return self.object
 
 
-class RelatorioUpdate(LoginRequiredMixin, UpdateView):
+class RelatorioUpdate(GroupRequiredMixin, UpdateView):
     model = Relatorio
     fields = [
         "estagio", "data_inicio", "data_termino",
@@ -242,62 +264,72 @@ class RelatorioUpdate(LoginRequiredMixin, UpdateView):
     ]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-relatorio")
+    group_required = ["Administrador"]
 
 ##################################################
 
 
-class CampusDelete(LoginRequiredMixin, DeleteView):
+class CampusDelete(GroupRequiredMixin, DeleteView):
     model = Campus
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-campus")
+    group_required = ["Administrador"]
 
 
-class CursoDelete(LoginRequiredMixin, DeleteView):  
+class CursoDelete(GroupRequiredMixin, DeleteView):  
     model = Curso
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-curso")
+    group_required = ["Administrador"]
 
 
-class EstudanteDelete(LoginRequiredMixin, DeleteView):
+class EstudanteDelete(GroupRequiredMixin, DeleteView):
     model = Estudante
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-estudante")
+    group_required = ["Administrador"]
 
 
-class ServidorDelete(LoginRequiredMixin, DeleteView):
+class ServidorDelete(GroupRequiredMixin, DeleteView):
     model = Servidor
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-servidor")
+    group_required = ["Administrador"]
 
 
-class UnidadeConcedenteDelete(LoginRequiredMixin, DeleteView):
+class UnidadeConcedenteDelete(GroupRequiredMixin, DeleteView):
     model = UnidadeConcedente
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-unidade-concedente")
+    group_required = ["Administrador"]
 
 
-class ResponsavelDelete(LoginRequiredMixin, DeleteView):
+class ResponsavelDelete(GroupRequiredMixin, DeleteView):
     model = Responsavel
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-responsavel")
+    group_required = ["Administrador"]
 
 
-class IntermediarioDelete(LoginRequiredMixin, DeleteView):
+class IntermediarioDelete(GroupRequiredMixin, DeleteView):
     model = Intermediario
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-intermediario")
+    group_required = ["Administrador"]
 
 
-class SituacaoDelete(LoginRequiredMixin, DeleteView):
+class SituacaoDelete(GroupRequiredMixin, DeleteView):
     model = Situacao
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-situacao")
+    group_required = ["Administrador"]
 
 
-class EstagioDelete(LoginRequiredMixin, DeleteView):
+class EstagioDelete(GroupRequiredMixin, DeleteView):
     model = Estagio
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-estagio")
+    group_required = ["Administrador"]
 
     # def get_object(self):
     #     self.object = get_object_or_404(
@@ -309,58 +341,68 @@ class EstagioDelete(LoginRequiredMixin, DeleteView):
     #     return self.object
 
 
-class RelatorioDelete(LoginRequiredMixin, DeleteView):
+class RelatorioDelete(GroupRequiredMixin, DeleteView):
     model = Relatorio
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-relatorio")
+    group_required = ["Administrador"]
 
 
 ##################################################
 
 
-class CampusList(LoginRequiredMixin, ListView):
+class CampusList(GroupRequiredMixin, ListView):
     model = Campus
     template_name = "cadastros/list/campus.html"
+    group_required = ["Administrador"]
 
 
-class CursoList(LoginRequiredMixin, ListView):
+class CursoList(GroupRequiredMixin, ListView):
     model = Curso
     template_name = "cadastros/list/curso.html"
+    group_required = ["Administrador"]
 
 
-class EstudanteList(LoginRequiredMixin, ListView):  
+class EstudanteList(GroupRequiredMixin, ListView):  
     model = Estudante
     template_name = "cadastros/list/estudante.html"
+    group_required = ["Administrador"]
 
 
-class ServidorList(LoginRequiredMixin, ListView):
+class ServidorList(GroupRequiredMixin, ListView):
     model = Servidor
     template_name = "cadastros/list/servidor.html"
+    group_required = ["Administrador"]
 
 
-class UnidadeConcedenteList(LoginRequiredMixin, ListView):
+class UnidadeConcedenteList(GroupRequiredMixin, ListView):
     model = UnidadeConcedente
     template_name = "cadastros/list/unidade-concedente.html"
+    group_required = ["Administrador"]
 
 
-class ResponsavelList(LoginRequiredMixin, ListView):
+class ResponsavelList(GroupRequiredMixin, ListView):
     model = Responsavel
     template_name = "cadastros/list/responsavel.html"
+    group_required = ["Administrador"]
 
 
-class IntermediarioList(LoginRequiredMixin, ListView):
+class IntermediarioList(GroupRequiredMixin, ListView):
     model = Intermediario
     template_name = "cadastros/list/intermediario.html"
+    group_required = ["Administrador"]
 
 
-class SituacaoList(LoginRequiredMixin, ListView):
+class SituacaoList(GroupRequiredMixin, ListView):
     model = Situacao
     template_name = "cadastros/list/situacao.html"
+    group_required = ["Administrador"]
 
 
-class EstagioList(LoginRequiredMixin, ListView):
+class EstagioList(GroupRequiredMixin, ListView):
     model = Estagio
     template_name = "cadastros/list/estagio.html"
+    group_required = ["Administrador"]
 
     # # Altera a consulta padrão de um ListView que é listar todos os registros
     # def get_queryset(self):
@@ -369,62 +411,73 @@ class EstagioList(LoginRequiredMixin, ListView):
     #     return Estagio.objects.filter(cadastrado_por=self.request.user)
 
 
-class RelatorioList(LoginRequiredMixin, ListView):
+class RelatorioList(GroupRequiredMixin, ListView):
     model = Relatorio
     template_name = "cadastros/list/relatorio.html"
+    group_required = ["Administrador"]
 
 
 ##################################################
 
 
-class CampusDetail(LoginRequiredMixin, DetailView):
+class CampusDetail(GroupRequiredMixin, DetailView):
     model = Campus
     template_name = "cadastros/detail/campus.html"
+    group_required = ["Administrador"]
 
 
-class CursoDetail(LoginRequiredMixin, DetailView):
+class CursoDetail(GroupRequiredMixin, DetailView):
     model = Curso
     template_name = "cadastros/detail/curso.html"
+    group_required = ["Administrador"]
 
 
-class EstudanteDetail(LoginRequiredMixin, DetailView):
+class EstudanteDetail(GroupRequiredMixin, DetailView):
     model = Estudante
     template_name = "cadastros/detail/estudante.html"
+    group_required = ["Administrador"]
 
 
-class ServidorDetail(LoginRequiredMixin, DetailView):
+class ServidorDetail(GroupRequiredMixin, DetailView):
     model = Servidor
     template_name = "cadastros/detail/servidor.html"
+    group_required = ["Administrador"]
 
 
-class UnidadeConcedenteDetail(LoginRequiredMixin, DetailView):
+class UnidadeConcedenteDetail(GroupRequiredMixin, DetailView):
     model = UnidadeConcedente
     template_name = "cadastros/detail/unidade-concedente.html"
+    group_required = ["Administrador"]
 
 
-class ResponsavelDetail(LoginRequiredMixin, DetailView):
+class ResponsavelDetail(GroupRequiredMixin, DetailView):
     model = Responsavel
     template_name = "cadastros/detail/responsavel.html"
+    group_required = ["Administrador"]
 
 
-class IntermediarioDetail(LoginRequiredMixin, DetailView):
+class IntermediarioDetail(GroupRequiredMixin, DetailView):
     model = Intermediario
     template_name = "cadastros/detail/intermediario.html"
+    group_required = ["Administrador"]
 
 
-class SituacaoDetail(LoginRequiredMixin, DetailView):
+class SituacaoDetail(GroupRequiredMixin, DetailView):
     model = Situacao
     template_name = "cadastros/detail/situacao.html"
+    group_required = ["Administrador"]
 
 
-class EstagioDetail(LoginRequiredMixin, DetailView):
+class EstagioDetail(GroupRequiredMixin, DetailView):
     model = Estagio
     template_name = "cadastros/detail/estagio.html"
+    group_required = ["Administrador"]
 
 
-class RelatorioDetail(LoginRequiredMixin, DetailView):
+class RelatorioDetail(GroupRequiredMixin, DetailView):
     model = Relatorio
     template_name = "cadastros/detail/relatorio.html"
+    group_required = ["Administrador"]
 
 
 ##################################################

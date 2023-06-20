@@ -16,6 +16,7 @@
 <table class="table table-striped">
     <tr>
         <th>Estudante</th>
+        <th>Orientador</th>
         <th>Empresa</th>
         <th>Período</th>
     </tr>
@@ -24,11 +25,13 @@
     {% for estagio in estagios_orientador %}
     <tr>
         <td>{{ estagio.estudante }}</td>
+        <td>{{ estagio.orientador }}</td>
         <td>{{ estagio.unidade_concedente }}</td>
         <td>
             {{ estagio.data_inicio|date:"d/m/Y" }} 
             - 
-            {{ estagio.data_termino|date:"d/m/Y" }}</td>
+            {{ estagio.data_termino|date:"d/m/Y" }}
+        </td>
     </tr>
     {% empty %}
     <tr>
@@ -43,14 +46,16 @@
 <h5>Meus estágios ~ Estudante</h5>
 <table class="table table-striped">
     <tr>
+        <th>Estudante</th>
         <th>Orientador</th>
         <th>Empresa</th>
         <th>Período</th>
     </tr>
     
     <!-- listar os objetos do tipo estágio -->
-    {% for estagio in estagios_orientador %}
+    {% for estagio in estagios_estudante %}
     <tr>
+        <td>{{ estagio.estudante }}</td>
         <td>{{ estagio.orientador }}</td>
         <td>{{ estagio.unidade_concedente }}</td>
         <td>

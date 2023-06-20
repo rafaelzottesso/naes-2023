@@ -10,15 +10,32 @@ class IndexView(TemplateView):
         dados = super().get_context_data(*args, **kwargs)
 
         if (self.request.user.is_authenticated):
+            ###################
+            # Exemplo de consulta mais bem elaborada... Explicado em aula
+            ###################
+            
+            # cursos = Curso.objects.filter(campus__nome="Paranavaí")
+
+            # relatorio = {}
+            # for c in cursos:
+            #     relatorio[c.pk] = Estagio.objects.filter(
+            #         situacao__nome="Vigente",
+            #         curso=c,
+            #         data_inicio__year=2023
+            #     ).count()
+
+            # dados["cursos"] = cursos
+            # dados["relatorios"] = relatorio
+            
 
             dados["estagios_estudante"] = Estagio.objects.filter(
                 estudante__usuario = self.request.user,
-                data_termino__lt=datetime.date.today()
+                #data_termino__lt=datetime.date.today()
             )
 
             dados["estagios_orientador"] = Estagio.objects.filter(
                 orientador__usuario=self.request.user,
-                data_termino__lt=datetime.date.today()
+                #data_termino__lt=datetime.date.today()
             )
 
         return dados
