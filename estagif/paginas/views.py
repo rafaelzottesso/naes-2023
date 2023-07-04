@@ -31,11 +31,11 @@ class IndexView(TemplateView):
             dados["estagios_estudante"] = Estagio.objects.filter(
                 estudante__usuario = self.request.user,
                 #data_termino__lt=datetime.date.today()
-            )
+            ).select_related("estudante", "orientador", "unidade_concedente")
 
             dados["estagios_orientador"] = Estagio.objects.filter(
                 orientador__usuario=self.request.user,
                 #data_termino__lt=datetime.date.today()
-            )
+            ).select_related("estudante", "orientador", "unidade_concedente")
 
         return dados

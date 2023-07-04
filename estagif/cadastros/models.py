@@ -26,6 +26,7 @@ class Campus(models.Model):
 
 class Curso(models.Model):
     nome = models.CharField(max_length=50)
+    campus = models.ForeignKey(Campus, on_delete=models.PROTECT)
 
     atualizado_em = models.DateTimeField(auto_now=True)
     cadastrado_em = models.DateTimeField(auto_now_add=True)

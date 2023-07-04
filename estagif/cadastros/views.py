@@ -355,66 +355,87 @@ class CampusList(GroupRequiredMixin, ListView):
     model = Campus
     template_name = "cadastros/list/campus.html"
     group_required = ["Administrador"]
+    paginate_by = 50
 
 
 class CursoList(GroupRequiredMixin, ListView):
     model = Curso
     template_name = "cadastros/list/curso.html"
     group_required = ["Administrador"]
+    paginate_by = 50
 
 
 class EstudanteList(GroupRequiredMixin, ListView):  
     model = Estudante
     template_name = "cadastros/list/estudante.html"
     group_required = ["Administrador"]
+    paginate_by = 50
 
 
 class ServidorList(GroupRequiredMixin, ListView):
     model = Servidor
     template_name = "cadastros/list/servidor.html"
     group_required = ["Administrador"]
+    paginate_by = 50
 
 
 class UnidadeConcedenteList(GroupRequiredMixin, ListView):
     model = UnidadeConcedente
     template_name = "cadastros/list/unidade-concedente.html"
     group_required = ["Administrador"]
+    paginate_by = 50
 
 
 class ResponsavelList(GroupRequiredMixin, ListView):
     model = Responsavel
     template_name = "cadastros/list/responsavel.html"
     group_required = ["Administrador"]
+    paginate_by = 50
+
+    def get_queryset(self):
+        self.object_list = Responsavel.objects.all().select_related("empresa")
+        return self.object_list
 
 
 class IntermediarioList(GroupRequiredMixin, ListView):
     model = Intermediario
     template_name = "cadastros/list/intermediario.html"
     group_required = ["Administrador"]
+    paginate_by = 50
 
 
 class SituacaoList(GroupRequiredMixin, ListView):
     model = Situacao
     template_name = "cadastros/list/situacao.html"
     group_required = ["Administrador"]
+    paginate_by = 50
 
 
 class EstagioList(GroupRequiredMixin, ListView):
     model = Estagio
     template_name = "cadastros/list/estagio.html"
     group_required = ["Administrador"]
+    paginate_by = 50
 
-    # # Altera a consulta padrão de um ListView que é listar todos os registros
-    # def get_queryset(self):
-    #     # o object_list é utilizado lá no for do HTML para armazenar uma lista de objetos
-    #     # Precisamos retornar essa lista
-    #     return Estagio.objects.filter(cadastrado_por=self.request.user)
+    # Altera a consulta padrão de um ListView que é listar todos os registros
+    def get_queryset(self):
+        # o object_list é utilizado lá no for do HTML para armazenar uma lista de objetos
+        # Precisamos retornar essa lista
+        return Estagio.objects.all().select_related(
+            "estudante",
+            "intermediario",
+            "unidade_concedente",
+            "responssvel_empresa",
+            "orientador",
+            "situacao",
+        )
 
 
 class RelatorioList(GroupRequiredMixin, ListView):
     model = Relatorio
     template_name = "cadastros/list/relatorio.html"
     group_required = ["Administrador"]
+    paginate_by = 50
 
 
 ##################################################

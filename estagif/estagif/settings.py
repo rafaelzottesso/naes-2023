@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # Ativar complementos
     "crispy_forms",
     "crispy_bootstrap5",
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "estagif.urls"
@@ -146,3 +149,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 LOGIN_URL = "login"
 LOGOUT_REDIRECT_URL = "pagina-inicial"
 LOGIN_REDIRECT_URL = "pagina-inicial"
+
+
+# Django Debug Toolbar
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
