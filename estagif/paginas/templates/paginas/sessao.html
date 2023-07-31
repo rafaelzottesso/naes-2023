@@ -1,0 +1,24 @@
+{% extends 'paginas/modelo.html' %}
+
+<!-- Carregar e pertimir o uso dos arquivos estáticos -->
+{% load static %}
+
+{% block conteudo %}
+
+<h3 class="mt-3">{{titulo}}</h3>
+
+<hr>
+
+<h3>
+    <div class="spinner-border text-primary spinner-border-sm" role="status">
+        <span class="visually-hidden">Ativando...</span>
+    </div>
+</h3>
+
+
+<meta http-equiv="refresh" content="5; URL='{% url 'pagina-inicial' %}'" />
+
+
+{% endblock %}
+
+

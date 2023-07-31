@@ -7,6 +7,14 @@
 
 <h3 class="mt-3">Exemplo de página</h3>
 
+<!-- Verifica se existe essa sessão com algum valor -->
+{% if request.session.fazenda_pk %}
+<h5>
+    <!-- Acessa o valor que está na sessão -->
+    Sessão fazenda: {{request.session.fazenda_pk}}
+</h5>
+{% endif %}
+
 <hr>
 
 {% if request.user.is_authenticated %}
