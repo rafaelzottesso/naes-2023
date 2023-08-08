@@ -10,6 +10,7 @@ from .views import SituacaoCreate, SituacaoUpdate, SituacaoList, SituacaoDetail,
 from .views import EstagioCreate, EstagioUpdate, EstagioList, EstagioDetail, EstagioDelete
 from .views import RelatorioCreate, RelatorioUpdate, RelatorioList, RelatorioDetail, RelatorioDelete
 
+from .views import EstudanteAutocomplete, OrientadorAutocomplete
 
 from .views import VendaCreate, CarrinhoCreate
 
@@ -76,5 +77,9 @@ urlpatterns = [
 
     path("vender/", VendaCreate.as_view(), name="vender"),
     path("adicionar/", CarrinhoCreate.as_view(), name="adicionar"),
+
+    # URL do autocomplete
+    path("buscar/estudante/", EstudanteAutocomplete.as_view(), name="buscar-estudante"),
+    path("buscar/orientador/", OrientadorAutocomplete.as_view(), name="buscar-orientador"),
 
 ]

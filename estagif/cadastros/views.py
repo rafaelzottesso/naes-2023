@@ -16,6 +16,12 @@ from braces.views import GroupRequiredMixin
 
 from django.shortcuts import get_object_or_404
 
+# Importação da biblioteca do autocomplete
+from dal import autocomplete
+
+# Importação dos meus formulários personalizados
+from .forms import EstagioForm
+
 # Create your views here.
 
 
@@ -98,12 +104,10 @@ class SituacaoCreate(GroupRequiredMixin, CreateView):
 
 
 class EstagioCreate(GroupRequiredMixin, CreateView):
-    model = Estagio
-    fields = [
-        "estudante", "intermediario", "unidade_concedente", "responssvel_empresa",
-        "orientador", "data_inicio", "data_termino", "ch_semanal",
-        "situacao", "observacoes",
-    ]
+    # Usar o form que a gente criou para criar o campo autocomplete
+    # Para isso, tiramos o "model" e o "fields" daqui e colocamos no forms.py
+    # Assim, precisamos criar o atributo "form_class"
+    form_class = EstagioForm
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-estagio")
     group_required = ["Administrador"]
@@ -554,3 +558,32 @@ class VendaCreate(CreateView):
 
         return url
         
+############## AUTOCOMPLETE ################
+
+# Criar uma view com essa herança e que retorne uma lista de objetos
+class EstudanteAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+
+        object_list = Estudante.objects.all()
+
+        # Pega o termo do campo e faz um filtro nele
+        if self.q:
+            object_list = object_list.filter(
+                nome__icontains=self.q
+            )
+        # Retorna a lista de objetos
+        return object_list
+
+
+class OrientadorAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+
+        object_list = Servidor.objects.all()
+
+        # Pega o termo do campo e faz um filtro nele
+        if self.q:
+            object_list = object_list.filter(
+                nome__icontains=self.q
+            )
+        # Retorna a lista de objetos
+        return object_list

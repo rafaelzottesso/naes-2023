@@ -22,3 +22,12 @@
 </form>
 
 {% endblock %}
+
+<!--
+    ! ! ! Muito importante ! ! !
+    Importar as bibliotecas do autocomplete DEPOIS do jquery
+-->
+
+{% block scripts %}
+{{ form.media }}
+{% endblock %}

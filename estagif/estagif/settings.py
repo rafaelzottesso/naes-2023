@@ -31,6 +31,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    
+    # Ativar o autocomplete antes de todos os apps
+    'dal',
+    'dal_select2',
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
