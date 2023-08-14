@@ -25,11 +25,13 @@
     color: #ffffff;
 }
 
+/* Ajustar o tamanho do campo para ficar igual os demais no form */
 .select2-container .select2-selection--single {
-    height: calc(1.5em + .75rem + 2px);
-    border: 1px solid #ced4da;
+    height: calc(1.5em + .75rem + 2px) !important;
+    border: 1px solid #dee2e6 !important;
 }
 
+/* Ocultar o ícone que fica duplicado */
 .select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: calc(1.5em + .75rem + 2px);
+    display: none;
 }
