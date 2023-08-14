@@ -536,7 +536,11 @@ class VendaCreate(CreateView):
         url = super().form_valid(form)
 
         # Busca todos os produtos que estão no carrinho
-        prod_carrinho = Carinho.objects.all()
+        prod_carrinho = Carinho.objects.filter(usuario=self.request.user)
+
+        if(prod_carrinho.count() == 0):
+            form.add_error("", "Nenhum item adicionado para finalizar a Venda.")
+            return super().form_invalid(form)
 
         valor_total = 0.0
 
