@@ -41,7 +41,7 @@ class CampusCreate(GroupRequiredMixin, CreateView):
 
 class CursoCreate(GroupRequiredMixin, CreateView):
     model = Curso
-    fields = ["nome"]
+    fields = ["nome", "campus"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-curso")
     extra_context = {"titulo": "Cadastro de Curso"}
@@ -176,7 +176,7 @@ class CampusUpdate(GroupRequiredMixin, UpdateView):
 
 class CursoUpdate(GroupRequiredMixin, UpdateView):
     model = Curso
-    fields = ["nome"]
+    fields = ["nome", "campus"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-curso")
     group_required = ["Administrador"]
@@ -367,6 +367,10 @@ class CursoList(GroupRequiredMixin, ListView):
     template_name = "cadastros/list/curso.html"
     group_required = ["Administrador"]
     paginate_by = 50
+
+    def get_queryset(self):
+        self.object_list = Curso.objects.all().select_related("campus")
+        return self.object_list
 
 
 class EstudanteList(GroupRequiredMixin, ListView):  

@@ -23,6 +23,7 @@
         <thead>
             <tr>
                 <th>Nome</th>
+                <th>Campus</th>
                 <th>Opções</th>
             </tr>
         </thead>
@@ -30,6 +31,7 @@
             {% for obj in object_list %}
             <tr class="">
                 <td>{{ obj.nome }}</td>
+                <td>{{ obj.campus }}</td>
                 <td>
                     <div class="dropdown">
                         <a class="btn btn-sm btn-outline-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
