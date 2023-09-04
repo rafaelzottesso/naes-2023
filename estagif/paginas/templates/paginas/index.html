@@ -5,7 +5,7 @@
 
 {% block conteudo %}
 
-<h3 class="mt-3">Exemplo de página</h3>
+<h3 class="mt-3" id="titulo">Exemplo de página</h3>
 
 <!-- Verifica se existe essa sessão com algum valor -->
 {% if request.session.fazenda_pk %}
@@ -84,9 +84,30 @@
 <p>
     Faça o login ou se registre no sistema.
 </p>
+
+<button type="button" class="btn btn-dark" id="btn-login">
+    Login
+</button>
+
 {% endif %}
 
 
 {% endblock %}
 
+{% block scripts %}
+<script>
+$(document).ready(function () {
+        
+    $("#btn-login").click(function (e) {
 
+        var tipo = $("#btn-login").prop("type");
+
+        alert("Tipo do botão: " + tipo);
+
+        $("#btn-login").prop("type", "reset");
+
+    });
+
+});
+</script>
+{% endblock %}
