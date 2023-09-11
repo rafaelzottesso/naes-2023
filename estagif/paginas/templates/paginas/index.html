@@ -100,11 +100,11 @@ $(document).ready(function () {
         
     $("#btn-login").click(function (e) {
 
-        var tipo = $("#btn-login").prop("type");
+        var tipo = $("#btn-login").attr("type");
 
         alert("Tipo do botão: " + tipo);
 
-        $("#btn-login").prop("type", "reset");
+        $("#btn-login").attr("type", "reset");
 
     });
 

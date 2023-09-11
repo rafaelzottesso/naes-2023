@@ -23,11 +23,47 @@
 
 {% endblock %}
 
-<!--
-    ! ! ! Muito importante ! ! !
-    Importar as bibliotecas do autocomplete DEPOIS do jquery
--->
 
 {% block scripts %}
+
+<!-- Importação do jQuery Mask Plugin -->
+<script src="{% static 'js/jquery.mask.js' %}"></script>
+
+<!-- Aplicar máscaras nos campos -->
+<script>
+$(document).ready(function () {
+
+    $("#id_cpf").mask("000.000.000-00");    
+    $("input[name*=data_]").mask("00/00/0000");
+
+    var SPMaskBehavior = function (val) {
+        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    },
+    spOptions = {
+        onKeyPress: function (val, e, field, options) {
+            field.mask(SPMaskBehavior.apply({}, arguments), options);
+        }
+    };
+
+    $('#id_telefone').mask(SPMaskBehavior, spOptions);
+
+
+    var CpfCnpjBehavior = function (val) {
+        return val.replace(/\D/g, '').length <= 11 ? '000.000.000-009' : '00.000.000/0000-00';
+    },
+    cpfcnpjOptions = {
+        onKeyPress: function (val, e, field, options) {
+            field.mask(CpfCnpjBehavior.apply({}, arguments), options);
+        }
+    };
+
+    $('#id_documento').mask(CpfCnpjBehavior, cpfcnpjOptions);
+
+});
+</script>
+
+<!--        ! ! ! Muito importante ! ! !
+Importar as bibliotecas do Autocomplete DEPOIS do jQuery -->
 {{ form.media }}
+
 {% endblock %}
