@@ -33,6 +33,9 @@
 <script>
 $(document).ready(function () {
 
+    $("#x, #y, #z").attr("type", "text");
+    $("#x, #y, #z").addClass("numeros");
+
     $("#id_cpf").mask("000.000.000-00");    
     $("input[name*=data_]").mask("00/00/0000");
 
@@ -58,6 +61,15 @@ $(document).ready(function () {
     };
 
     $('#id_documento').mask(CpfCnpjBehavior, cpfcnpjOptions);
+
+
+    $("form").submit(function (e) { 
+        $.each(".numeros", function (i, valor) { 
+             valor = valor.replace(".", "").replace(",", ".");
+             $(this).attr("type", "number");
+             $(this).val(valor);
+        });        
+    });
 
 });
 </script>
