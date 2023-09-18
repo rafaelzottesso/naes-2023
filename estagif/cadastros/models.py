@@ -83,6 +83,14 @@ class UnidadeConcedente(models.Model):
     telefone = models.CharField(max_length=15)
     documento = models.CharField(max_length=18, help_text="Preencha com o CNPJ ou CPF (caso pessoa física)")
 
+    cep = models.CharField(max_length=10, verbose_name="CEP")
+    logradouro = models.CharField(max_length=100)
+    numero = models.CharField(max_length=20, verbose_name="Número", null=True, blank=True)
+    bairro = models.CharField(max_length=50, null=True, blank=True)
+    cidade = models.CharField(max_length=50)
+
+
+
     atualizado_em = models.DateTimeField(auto_now=True)
     cadastrado_em = models.DateTimeField(auto_now_add=True)
         

@@ -73,7 +73,8 @@ class ServidorCreate(GroupRequiredMixin, CreateView):
 
 class UnidadeConcedenteCreate(GroupRequiredMixin, CreateView):
     model = UnidadeConcedente
-    fields = ["nome", "documento", "telefone", "email",]
+    fields = ["nome", "documento", "telefone", "email",
+              "cep", "logradouro", "numero", "bairro", "cidade"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-unidade-concedente")
     group_required = ["Administrador"]
@@ -204,7 +205,8 @@ class ServidorUpdate(LoginRequiredMixin, UpdateView):
 
 class UnidadeConcedenteUpdate(GroupRequiredMixin, UpdateView):
     model = UnidadeConcedente
-    fields = ["nome", "documento", "telefone", "email",]
+    fields = ["nome", "documento", "telefone", "email",
+              "cep", "logradouro", "numero", "bairro", "cidade"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-unidade-concedente")
     group_required = ["Administrador"]

@@ -25,6 +25,7 @@
                 <th>Email</th>
                 <th>Telefone</th>
                 <th>Documento</th>
+                <th>Endereço</th>
                 <th>Atualizado em</th>
                 <th>Opções</th>
             </tr>
@@ -35,6 +36,7 @@
                 <td>{{ obj.nome }}</td>
                 <td>{{ obj.email }}</td>
                 <td>{{ obj.telefone }}</td>
+                <td>{{ obj.logradouro }} <br> {{ obj.cidade }}</td>
                 <td>{{ obj.documento }}</td>
                 <td>{{ obj.atualizado_em }}</td>
                 <td>
