@@ -298,67 +298,76 @@ class RelatorioUpdate(GroupRequiredMixin, SuccessMessageMixin, UpdateView):
 ##################################################
 
 
-class CampusDelete(GroupRequiredMixin, DeleteView):
+class CampusDelete(GroupRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Campus
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-campus")
     group_required = ["Administrador"]
+    success_message = "Campus excluído com sucesso!"
 
 
-class CursoDelete(GroupRequiredMixin, DeleteView):  
+class CursoDelete(GroupRequiredMixin, SuccessMessageMixin, DeleteView):  
     model = Curso
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-curso")
     group_required = ["Administrador"]
+    success_message = "Curso excluído com sucesso!"
 
 
-class EstudanteDelete(GroupRequiredMixin, DeleteView):
+class EstudanteDelete(GroupRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Estudante
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-estudante")
     group_required = ["Administrador"]
+    success_message = "Estudante excluído com sucesso!"
 
 
-class ServidorDelete(GroupRequiredMixin, DeleteView):
+class ServidorDelete(GroupRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Servidor
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-servidor")
     group_required = ["Administrador"]
+    success_message = "Servidor excluído com sucesso!"
 
 
-class UnidadeConcedenteDelete(GroupRequiredMixin, DeleteView):
+class UnidadeConcedenteDelete(GroupRequiredMixin, SuccessMessageMixin, DeleteView):
     model = UnidadeConcedente
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-unidade-concedente")
     group_required = ["Administrador"]
+    success_message = "Unidade Concedente excluída com sucesso!"
 
 
-class ResponsavelDelete(GroupRequiredMixin, DeleteView):
+class ResponsavelDelete(GroupRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Responsavel
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-responsavel")
     group_required = ["Administrador"]
+    success_message = "Responsavél excluído com sucesso!"
 
 
-class IntermediarioDelete(GroupRequiredMixin, DeleteView):
+class IntermediarioDelete(GroupRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Intermediario
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-intermediario")
     group_required = ["Administrador"]
+    success_message = "Intermediário excluído com sucesso!"
 
 
-class SituacaoDelete(GroupRequiredMixin, DeleteView):
+class SituacaoDelete(GroupRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Situacao
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-situacao")
     group_required = ["Administrador"]
+    success_message = "Situação excluída com sucesso!"
 
 
-class EstagioDelete(GroupRequiredMixin, DeleteView):
+class EstagioDelete(GroupRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Estagio
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-estagio")
     group_required = ["Administrador"]
+    success_message = "Estágio excluído com sucesso!"
 
     # def get_object(self):
     #     self.object = get_object_or_404(
@@ -370,11 +379,12 @@ class EstagioDelete(GroupRequiredMixin, DeleteView):
     #     return self.object
 
 
-class RelatorioDelete(GroupRequiredMixin, DeleteView):
+class RelatorioDelete(GroupRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Relatorio
     template_name = "cadastros/delete.html"
     success_url = reverse_lazy("listar-relatorio")
     group_required = ["Administrador"]
+    success_message = "Relatório excluído com sucesso!"
 
 
 ##################################################

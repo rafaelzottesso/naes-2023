@@ -1,0 +1,192 @@
+{% extends "paginas/modelo.html" %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block conteudo %}
+
+<h3 class="mt-3 border-bottom mb-4 pb-2">
+    {{ titulo|default:"Excluir registros" }}
+</h3>
+
+<p class="lead">
+  Tem certeza que quer excluir o registro:
+  <span>
+    {{object}}
+  </span>
+</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    {{ form|crispy }}
+
+    <button type="submit" class="btn btn-danger">
+        <i class="bi bi-check-lg"></i>
+        Excluir
+    </button>
+</form>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<style>
+.dots-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin-top: 15px ;
+}
+
+.dot {
+  height: 20px;
+  width: 20px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background-color: #b3d4fc;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.dot:last-child {
+  margin-right: 0;
+}
+
+.dot:nth-child(1) {
+  animation-delay: -0.3s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.1s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.1s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    background-color: #b3d4fc;
+    box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: #6793fb;
+    box-shadow: 0 0 0 10px rgba(178, 212, 252, 0);
+  }
+
+  100% {
+    transform: scale(0.8);
+    background-color: #b3d4fc;
+    box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+  }
+}
+</style>
+
+<!-- Importação do jQuery Mask Plugin -->
+<script src="{% static 'js/jquery.mask.js' %}"></script>
+
+<!-- Aplicar máscaras nos campos -->
+<script>
+$(document).ready(function () {
+
+    $("#x, #y, .z").attr("type", "text");
+    $("#x, #y, .z").addClass("numeros");
+
+    $("#id_cpf").mask("000.000.000-00");    
+    $("#id_cep").mask("00000-000");    
+    $("input[name*=data_]").mask("00/00/0000");
+
+    var SPMaskBehavior = function (val) {
+        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    },
+    spOptions = {
+        onKeyPress: function (val, e, field, options) {
+            field.mask(SPMaskBehavior.apply({}, arguments), options);
+        }
+    };
+
+    $('#id_telefone').mask(SPMaskBehavior, spOptions);
+
+
+    var CpfCnpjBehavior = function (val) {
+        return val.replace(/\D/g, '').length <= 11 ? '000.000.000-009' : '00.000.000/0000-00';
+    },
+    cpfcnpjOptions = {
+        onKeyPress: function (val, e, field, options) {
+            field.mask(CpfCnpjBehavior.apply({}, arguments), options);
+        }
+    };
+
+    $('#id_documento').mask(CpfCnpjBehavior, cpfcnpjOptions);
+
+
+    $("form").submit(function (e) { 
+
+        $.each(".numeros", function (i, valor) { 
+             valor = valor.replace(".", "").replace(",", ".");
+             $(this).attr("type", "number");
+             $(this).val(valor);
+        }); 
+
+    });
+
+    // Consulta de CEP com Ajax
+    $("#id_cep").blur(function (e) { 
+
+        // limpar os campos
+        $("#id_logradouro").val("");
+        $("#id_bairro").val("");
+        $("#id_cidade").val("");
+
+        var cep = $("#id_cep").val();
+
+        if(cep.length < 9){
+            return;
+        }
+
+        $("#div_id_cep").append(
+                '<section class="dots-container">'+
+                    '<div class="dot"></div>'+
+                    '<div class="dot"></div>'+
+                    '<div class="dot"></div>'+
+                    '<div class="dot"></div>'+
+                    '<div class="dot"></div>'+
+                '</section>'
+        );
+        
+        var url = "https://viacep.com.br/ws/"+ cep +"/json/";
+
+        $.getJSON(url, "",
+            function (data, textStatus, jqXHR) {
+
+                if(data.erro != true){
+                    $("#id_logradouro").val(data.logradouro);
+                    $("#id_bairro").val(data.bairro);
+                    $("#id_cidade").val(data.localidade + "/" + data.uf);
+                    $("#id_numero").focus();
+                }
+
+
+            }
+        );
+
+        // Remove esse elemento
+        // $("#spinner").remove();
+        
+    });
+
+});
+</script>
+
+<!--        ! ! ! Muito importante ! ! !
+Importar as bibliotecas do Autocomplete DEPOIS do jQuery -->
+{{ form.media }}
+
+{% endblock %}
