@@ -138,6 +138,7 @@
     <!-- Begin page content -->
     <main class="flex-shrink-0">
         <div class="container pb-4">
+
             {% block conteudo %}
 
             <h1 class="mt-5">Título da Página</h1>
@@ -167,9 +168,35 @@
     </footer>
 
 
+    {% if messages %}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        {% for m in messages %}
+    
+        <div class="toast border-{{m.tags}}" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header border-{{m.tags}}">
+                <strong class="me-auto">Aviso</strong>
+                <small class="text-body-secondary">Agora</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                {{ m }}
+            </div>
+        </div>
+    
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.toast').toast('show');
+        });
+    </script>
 
     {% block scripts %}
 

@@ -16,6 +16,9 @@ from braces.views import GroupRequiredMixin
 
 from django.shortcuts import get_object_or_404
 
+# Framework de mensagens/notificações
+from django.contrib.messages.views import SuccessMessageMixin
+
 # Importação da biblioteca do autocomplete
 from dal import autocomplete
 
@@ -25,12 +28,13 @@ from .forms import EstagioForm
 # Create your views here.
 
 
-class CampusCreate(GroupRequiredMixin, CreateView):
+class CampusCreate(GroupRequiredMixin, SuccessMessageMixin, CreateView):
     model = Campus
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-campus")
     group_required = ["Administrador"]
+    success_message = "Campus %(nome)s inserido com sucesso!"
 
     def get_context_data(self, *args, **kwargs):
 
@@ -39,16 +43,17 @@ class CampusCreate(GroupRequiredMixin, CreateView):
         return dados
 
 
-class CursoCreate(GroupRequiredMixin, CreateView):
+class CursoCreate(GroupRequiredMixin, SuccessMessageMixin, CreateView):
     model = Curso
     fields = ["nome", "campus"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-curso")
     extra_context = {"titulo": "Cadastro de Curso"}
     group_required = ["Administrador"]
+    success_message = "Curso %(nome)s inserido com sucesso!"
 
 
-class EstudanteCreate(GroupRequiredMixin, CreateView):
+class EstudanteCreate(GroupRequiredMixin, SuccessMessageMixin, CreateView):
     model = Estudante
     fields = [
         "nome", "cpf", "data_nascimento", "telefone", "email",
@@ -58,9 +63,10 @@ class EstudanteCreate(GroupRequiredMixin, CreateView):
     success_url = reverse_lazy("listar-estudante")
     extra_context = {"titulo": "Cadastro de Estudante"}
     group_required = ["Administrador"]
+    success_message = "Estudante %(nome)s inserido com sucesso!"
 
 
-class ServidorCreate(GroupRequiredMixin, CreateView):
+class ServidorCreate(GroupRequiredMixin, SuccessMessageMixin, CreateView):
     model = Servidor
     fields = [
         "nome","cpf","data_nascimento","telefone",
@@ -69,42 +75,47 @@ class ServidorCreate(GroupRequiredMixin, CreateView):
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-servidor")
     group_required = ["Administrador"]
+    success_message = "Servidor %(nome)s inserido com sucesso!"
 
 
-class UnidadeConcedenteCreate(GroupRequiredMixin, CreateView):
+class UnidadeConcedenteCreate(GroupRequiredMixin, SuccessMessageMixin, CreateView):
     model = UnidadeConcedente
     fields = ["nome", "documento", "telefone", "email",
               "cep", "logradouro", "numero", "bairro", "cidade"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-unidade-concedente")
     group_required = ["Administrador"]
+    success_message = "Unidade Concedente %(nome)s inserida com sucesso!"
 
 
-class ResponsavelCreate(GroupRequiredMixin, CreateView):
+class ResponsavelCreate(GroupRequiredMixin, SuccessMessageMixin, CreateView):
     model = Responsavel
     fields = ["nome", "email", "telefone", "cpf", "empresa",]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-responsavel")
     group_required = ["Administrador"]
+    success_message = "Responsável %(nome)s inserido com sucesso!"
 
 
-class IntermediarioCreate(GroupRequiredMixin, CreateView):
+class IntermediarioCreate(GroupRequiredMixin, SuccessMessageMixin, CreateView):
     model = Intermediario
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-intermediario")
     group_required = ["Administrador"]
+    success_message = "Intermediário %(nome)s inserido com sucesso!"
 
 
-class SituacaoCreate(GroupRequiredMixin, CreateView):
+class SituacaoCreate(GroupRequiredMixin, SuccessMessageMixin, CreateView):
     model = Situacao
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-situacao")
     group_required = ["Administrador"]
+    success_message = "Situação %(nome)s inserida com sucesso!"
 
 
-class EstagioCreate(GroupRequiredMixin, CreateView):
+class EstagioCreate(GroupRequiredMixin, SuccessMessageMixin, CreateView):
     # Usar o form que a gente criou para criar o campo autocomplete
     # Para isso, tiramos o "model" e o "fields" daqui e colocamos no forms.py
     # Assim, precisamos criar o atributo "form_class"
@@ -112,6 +123,7 @@ class EstagioCreate(GroupRequiredMixin, CreateView):
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-estagio")
     group_required = ["Administrador"]
+    success_message = "Estágio inserido com sucesso!"
 
     # Método padrão chamado quando um formulário é submetido
     def form_valid(self, form): 
@@ -149,7 +161,7 @@ class EstagioCreate(GroupRequiredMixin, CreateView):
         return url
 
 
-class RelatorioCreate(GroupRequiredMixin, CreateView):
+class RelatorioCreate(GroupRequiredMixin, SuccessMessageMixin, CreateView):
     model = Relatorio
     fields = [
         "estagio", "data_inicio", "data_termino",
@@ -158,6 +170,7 @@ class RelatorioCreate(GroupRequiredMixin, CreateView):
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-relatorio")
     group_required = ["Administrador"]
+    success_message = "Relatório inserido com sucesso!"
 
     def form_valid(self, form):
         form.instance.cadastrado_por = self.request.user
@@ -167,23 +180,25 @@ class RelatorioCreate(GroupRequiredMixin, CreateView):
 ##################################################
 
 
-class CampusUpdate(GroupRequiredMixin, UpdateView):
+class CampusUpdate(GroupRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Campus
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-campus")
     group_required = ["Administrador"]
+    success_message = "Campus %(nome)s atualizado com sucesso!"
 
 
-class CursoUpdate(GroupRequiredMixin, UpdateView):
+class CursoUpdate(GroupRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Curso
     fields = ["nome", "campus"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-curso")
     group_required = ["Administrador"]
+    success_message = "Curso %(nome)s atualizado com sucesso!"
 
 
-class EstudanteUpdate(LoginRequiredMixin, UpdateView):
+class EstudanteUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Estudante
     fields = [
         "nome", "cpf", "data_nascimento", "telefone", "email",
@@ -191,9 +206,10 @@ class EstudanteUpdate(LoginRequiredMixin, UpdateView):
     ]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-estudante")
+    success_message = "Estudante %(nome)s atualizado com sucesso!"
 
 
-class ServidorUpdate(LoginRequiredMixin, UpdateView):
+class ServidorUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Servidor
     fields = [
         "nome","cpf","data_nascimento","telefone",
@@ -201,42 +217,47 @@ class ServidorUpdate(LoginRequiredMixin, UpdateView):
     ]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-servidor")
+    success_message = "Servidor %(nome)s atualizado com sucesso!"
 
 
-class UnidadeConcedenteUpdate(GroupRequiredMixin, UpdateView):
+class UnidadeConcedenteUpdate(GroupRequiredMixin, SuccessMessageMixin, UpdateView):
     model = UnidadeConcedente
     fields = ["nome", "documento", "telefone", "email",
               "cep", "logradouro", "numero", "bairro", "cidade"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-unidade-concedente")
     group_required = ["Administrador"]
+    success_message = "Unidade Concedente %(nome)s inserida com sucesso!"
 
 
-class ResponsavelUpdate(GroupRequiredMixin, UpdateView):
+class ResponsavelUpdate(GroupRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Responsavel
     fields = ["nome", "email", "telefone", "cpf", "empresa",]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-responsavel")
     group_required = ["Administrador"]
+    success_message = "Responsável %(nome)s atualizado com sucesso!"
 
 
-class IntermediarioUpdate(GroupRequiredMixin, UpdateView):
+class IntermediarioUpdate(GroupRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Intermediario
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-intermediario")
     group_required = ["Administrador"]
+    success_message = "Intermediário %(nome)s atualizado com sucesso!"
 
 
-class SituacaoUpdate(GroupRequiredMixin, UpdateView):
+class SituacaoUpdate(GroupRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Situacao
     fields = ["nome"]
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-situacao")
     group_required = ["Administrador"]
+    success_message = "Situação %(nome)s inserida com sucesso!"
 
 
-class EstagioUpdate(GroupRequiredMixin, UpdateView):
+class EstagioUpdate(GroupRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Estagio
     fields = [
         "estudante", "intermediario", "unidade_concedente", "responssvel_empresa",
@@ -246,6 +267,7 @@ class EstagioUpdate(GroupRequiredMixin, UpdateView):
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-estagio")
     group_required = ["Administrador"]
+    success_message = "Estágio atualizado com sucesso!"
 
     # def get_object(self):
     #     self.object = get_object_or_404(
@@ -262,7 +284,7 @@ class EstagioUpdate(GroupRequiredMixin, UpdateView):
     #     return self.object
 
 
-class RelatorioUpdate(GroupRequiredMixin, UpdateView):
+class RelatorioUpdate(GroupRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Relatorio
     fields = [
         "estagio", "data_inicio", "data_termino",
@@ -271,6 +293,7 @@ class RelatorioUpdate(GroupRequiredMixin, UpdateView):
     template_name = "cadastros/form.html"
     success_url = reverse_lazy("listar-relatorio")
     group_required = ["Administrador"]
+    success_message = "Relatório atualizado com sucesso!"
 
 ##################################################
 
