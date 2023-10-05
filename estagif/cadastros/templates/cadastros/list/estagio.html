@@ -2,6 +2,10 @@
 
 {% load static %}
 
+<!-- Carrega os filtros que você criou -->
+{% load meus_filtros %}
+
+
 {% block conteudo %}
 
 <div class="row justify-content-center align-items-center mt-3">
@@ -46,7 +50,10 @@
                 <td>{{ obj.orientador }}</td>
                 <td>{{ obj.data_inicio }}</td>
                 <td>{{ obj.data_termino }}</td>
-                <td>{{ obj.ch_semanal }}</td>
+                <td>
+                    CH Total: {{ obj.ch_semanal }}h <br>
+                    CH Válida: {{ obj.ch_semanal|desconto_10 }}h
+                </td>
                 <td>{{ obj.situacao }}</td>
                 <td>{{ obj.observacoes }}</td>
                 <td>{{ obj.data_protocolo }}</td>
